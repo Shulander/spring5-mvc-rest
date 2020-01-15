@@ -24,17 +24,17 @@ public class CategoryController {
 
 
     @ResponseBody
-    @GetMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoryListDTO> listCategories() {
-        List<CategoryDTO> categories = categoryService.getAllCategories();
+        List<CategoryDTO> categories = categoryService.findAllCategories();
         return ResponseEntity.ok(new CategoryListDTO(categories));
     }
 
 
     @ResponseBody
-    @GetMapping(value = "/{name}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{name}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoryDTO> listCategories(@PathVariable String name) {
-        CategoryDTO category = categoryService.getCategoryByName(name);
+        CategoryDTO category = categoryService.findCategoryByName(name);
         return ResponseEntity.ok(category);
     }
 }

@@ -27,12 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryControllerTest {
-
-    public static final String NAME = "Jim";
+    private static final String NAME = "Jim";
 
     @Mock
     CategoryService categoryService;
-
     @InjectMocks
     CategoryController categoryController;
 
@@ -41,9 +39,7 @@ public class CategoryControllerTest {
 
     @BeforeEach
     public void setUp() {
-
         mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
-
     }
 
 
@@ -59,7 +55,7 @@ public class CategoryControllerTest {
 
         List<CategoryDTO> categories = Arrays.asList(category1, category2);
 
-        when(categoryService.getAllCategories()).thenReturn(categories);
+        when(categoryService.findAllCategories()).thenReturn(categories);
 
         mockMvc.perform(get("/api/v1/categories/")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -74,7 +70,7 @@ public class CategoryControllerTest {
         category1.setId(1l);
         category1.setName(NAME);
 
-        when(categoryService.getCategoryByName(anyString())).thenReturn(category1);
+        when(categoryService.findCategoryByName(anyString())).thenReturn(category1);
 
         mockMvc.perform(get("/api/v1/categories/Jim")
                                 .contentType(MediaType.APPLICATION_JSON))

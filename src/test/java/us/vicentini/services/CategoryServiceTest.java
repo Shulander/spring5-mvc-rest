@@ -21,7 +21,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
-
     public static final Long ID = 2L;
     public static final String NAME = "Jimmy";
     CategoryService categoryService;
@@ -43,7 +42,7 @@ public class CategoryServiceTest {
         when(categoryRepository.findAll()).thenReturn(categories);
 
         //when
-        List<CategoryDTO> categoryDTOS = categoryService.getAllCategories();
+        List<CategoryDTO> categoryDTOS = categoryService.findAllCategories();
 
         //then
         assertEquals(3, categoryDTOS.size());
@@ -59,7 +58,7 @@ public class CategoryServiceTest {
         when(categoryRepository.findByName(anyString())).thenReturn(category);
 
         //when
-        CategoryDTO categoryDTO = categoryService.getCategoryByName(NAME);
+        CategoryDTO categoryDTO = categoryService.findCategoryByName(NAME);
 
         //then
         assertEquals(ID, categoryDTO.getId());
