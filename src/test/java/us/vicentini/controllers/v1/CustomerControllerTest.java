@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -113,6 +114,25 @@ class CustomerControllerTest {
         when(customerService.updateCustomer(eq(1L), eq(customer))).thenReturn(persistedCustomer);
 
         mockMvc.perform(put("/api/v1/customers/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(customer)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", equalTo("Bruce")))
+                .andExpect(jsonPath("$.lastName", equalTo("Wayne")))
+                .andExpect(jsonPath("$.customerUrl", equalTo("/api/v1/customers/1")));
+    }
+
+
+    @Test
+    void shouldPatchCustomer() throws Exception {
+        CustomerDTO customer = CustomerDTO.builder()
+                .firstName("Bruce")
+                .lastName("Wayne").build();
+        CustomerDTO persistedCustomer = customer.toBuilder()
+                .id(1L).build();
+        when(customerService.patchCustomer(eq(1L), eq(customer))).thenReturn(persistedCustomer);
+
+        mockMvc.perform(patch("/api/v1/customers/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(asJsonString(customer)))
                 .andExpect(status().isOk())

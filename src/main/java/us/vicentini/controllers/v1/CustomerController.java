@@ -3,6 +3,7 @@ package us.vicentini.controllers.v1;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -55,6 +56,14 @@ public class CustomerController {
     @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         CustomerDTO customer = customerService.updateCustomer(id, customerDTO);
+        return ResponseEntity.ok().body(customer);
+    }
+
+
+    @ResponseBody
+    @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CustomerDTO> patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+        CustomerDTO customer = customerService.patchCustomer(id, customerDTO);
         return ResponseEntity.ok().body(customer);
     }
 }

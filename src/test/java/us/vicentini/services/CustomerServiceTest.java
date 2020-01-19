@@ -19,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -100,6 +103,27 @@ class CustomerServiceTest {
         assertEquals(ID, persistedCustomer.getId());
         assertEquals(FIRST_NAME, persistedCustomer.getFirstName());
         assertEquals(LAST_NAME, persistedCustomer.getLastName());
+    }
+
+
+    @Test
+    void shouldPatchCustomer() {
+        CustomerDTO customerDTO = spy(createCustomerDTO());
+        Customer customer = spy(Customer.builder().id(ID).build());
+        Customer patchedCustomer = createCustomer();
+        when(customerRepository.findById(ID)).thenReturn(Optional.of(customer));
+        when(customerRepository.save(eq(patchedCustomer))).thenReturn(patchedCustomer);
+
+        CustomerDTO persistedCustomer = customerService.patchCustomer(ID, customerDTO);
+
+        assertNotNull(persistedCustomer);
+        assertEquals(ID, persistedCustomer.getId());
+        assertEquals(FIRST_NAME, persistedCustomer.getFirstName());
+        assertEquals(LAST_NAME, persistedCustomer.getLastName());
+        verify(customerDTO).getFirstName();
+        verify(customer).setFirstName(FIRST_NAME);
+        verify(customerDTO).getLastName();
+        verify(customer).setLastName(LAST_NAME);
     }
 
 

@@ -1,5 +1,6 @@
 package us.vicentini.api.v1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import static us.vicentini.controllers.v1.CustomerController.API_V1_CUSTOMERS;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
 public class CustomerDTO {
+    @JsonIgnore
     private Long id;
     private String firstName;
     private String lastName;
