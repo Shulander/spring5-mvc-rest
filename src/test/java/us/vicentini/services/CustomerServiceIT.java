@@ -6,12 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import us.vicentini.api.v1.mapper.CustomerMapper;
 import us.vicentini.api.v1.model.CustomerDTO;
 import us.vicentini.bootstrap.Bootstrap;
 import us.vicentini.repositories.CategoryRepository;
 import us.vicentini.repositories.CustomerRepository;
+import us.vicentini.repositories.VendorRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,16 +25,17 @@ class CustomerServiceIT {
 
     @Autowired
     private CustomerRepository customerRepository;
-
-    @Autowired
+    @MockBean
     private CategoryRepository categoryRepository;
+    @MockBean
+    private VendorRepository vendorRepository;
 
     private CustomerService customerService;
 
 
     @BeforeEach
     void setUp() {
-        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository);
+        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository);
         bootstrap.run();
 
         customerService = new CustomerServiceImpl(CustomerMapper.INSTANCE, customerRepository);

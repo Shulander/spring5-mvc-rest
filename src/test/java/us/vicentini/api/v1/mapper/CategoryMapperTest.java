@@ -2,6 +2,7 @@ package us.vicentini.api.v1.mapper;
 
 import org.junit.jupiter.api.Test;
 import us.vicentini.api.v1.model.CategoryDTO;
+import us.vicentini.controllers.v1.CategoryController;
 import us.vicentini.domain.Category;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,5 +28,6 @@ class CategoryMapperTest {
         //then
         assertEquals(Long.valueOf(ID), categoryDTO.getId());
         assertEquals(NAME, categoryDTO.getName());
+        assertEquals(CategoryController.BASE_PATH + "/" + ID, categoryDTO.getCategoryUrl());
     }
 }
