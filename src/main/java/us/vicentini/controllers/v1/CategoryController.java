@@ -1,11 +1,11 @@
 package us.vicentini.controllers.v1;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import us.vicentini.api.v1.model.CategoryDTO;
 import us.vicentini.api.v1.model.CategoryListDTO;
@@ -24,18 +24,17 @@ public class CategoryController {
     private final CategoryService categoryService;
 
 
-    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CategoryListDTO> listCategories() {
+    public CategoryListDTO listCategories() {
         List<CategoryDTO> categories = categoryService.findAllCategories();
-        return ResponseEntity.ok(new CategoryListDTO(categories));
+        return new CategoryListDTO(categories);
     }
 
 
-    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{name}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CategoryDTO> listCategories(@PathVariable String name) {
-        CategoryDTO category = categoryService.findCategoryByName(name);
-        return ResponseEntity.ok(category);
+    public CategoryDTO listCategories(@PathVariable String name) {
+        return categoryService.findCategoryByName(name);
     }
 }

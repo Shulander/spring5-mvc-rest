@@ -1,7 +1,7 @@
 package us.vicentini.controllers.v1;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import us.vicentini.api.v1.model.CustomerDTO;
 import us.vicentini.api.v1.model.CustomerListDTO;
 import us.vicentini.services.CustomerService;
 
-import java.net.URI;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -29,50 +28,45 @@ public class CustomerController {
     private final CustomerService customerService;
 
 
-    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerListDTO> findAllCustomers() {
+    public CustomerListDTO findAllCustomers() {
         List<CustomerDTO> customers = customerService.findAllCustomers();
-        return ResponseEntity.ok(new CustomerListDTO(customers));
+        return new CustomerListDTO(customers);
     }
 
 
-    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> findCustomerById(@PathVariable Long id) {
-        CustomerDTO customer = customerService.findCustomersById(id);
-        return ResponseEntity.ok(customer);
+    public CustomerDTO findCustomerById(@PathVariable Long id) {
+        return customerService.findCustomersById(id);
     }
 
 
-    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO) {
-        CustomerDTO customer = customerService.createNewCustomer(customerDTO);
-        return ResponseEntity.created(URI.create(customer.getCustomerUrl())).body(customer);
+    public CustomerDTO createNewCustomer(@RequestBody CustomerDTO customerDTO) {
+        return customerService.createNewCustomer(customerDTO);
     }
 
 
-    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
-        CustomerDTO customer = customerService.updateCustomer(id, customerDTO);
-        return ResponseEntity.ok().body(customer);
+    public CustomerDTO updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+        return customerService.updateCustomer(id, customerDTO);
     }
 
 
-    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
-        CustomerDTO customer = customerService.patchCustomer(id, customerDTO);
-        return ResponseEntity.ok().body(customer);
+    public CustomerDTO patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+        return customerService.patchCustomer(id, customerDTO);
     }
 
 
-    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+    public void deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomerById(id);
-        return ResponseEntity.ok().build();
     }
 }
