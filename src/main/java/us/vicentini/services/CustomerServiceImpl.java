@@ -9,6 +9,8 @@ import us.vicentini.domain.Customer;
 import us.vicentini.repositories.CustomerRepository;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -51,4 +53,27 @@ class CustomerServiceImpl implements CustomerService {
         Customer savedCustomer = customerRepository.save(customer);
         return customerMapper.customerToCustomerDTO(savedCustomer);
     }
+
+
+    @Override
+    public CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO) {
+        return customerRepository.findById(id)
+                .map(customer -> {
+                    copyIfNonNull(customerDTO::getFirstName, customer::setFirstName);
+                    copyIfNonNull(customerDTO::getLastName, customer::setLastName);
+                    return customer;
+                })
+                .map(customerRepository::save)
+                .map(customerMapper::customerToCustomerDTO)
+                .orElseThrow(RuntimeException::new);
+    }
+
+
+    private <T> void copyIfNonNull(Supplier<T> s, Consumer<T> c) {
+        T value = s.get();
+        if (value != null) {
+            c.accept(value);
+        }
+    }
+
 }
