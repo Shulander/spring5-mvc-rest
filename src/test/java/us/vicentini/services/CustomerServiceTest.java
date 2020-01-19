@@ -1,5 +1,6 @@
 package us.vicentini.services;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,6 +67,8 @@ class CustomerServiceTest {
 
     @Test
     void shouldFailWithExceptionCustomerNotFound() {
+        when(customerRepository.findById(ID)).thenReturn(Optional.empty());
+
         assertThrows(RuntimeException.class, () -> customerService.findCustomersById(ID));
     }
 
@@ -76,6 +80,21 @@ class CustomerServiceTest {
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
         CustomerDTO persistedCustomer = customerService.createNewCustomer(customerDTO);
+
+        assertNotNull(persistedCustomer);
+        assertEquals(ID, persistedCustomer.getId());
+        assertEquals(FIRST_NAME, persistedCustomer.getFirstName());
+        assertEquals(LAST_NAME, persistedCustomer.getLastName());
+    }
+
+
+    @Test
+    void shouldUpdateCustomer() {
+        CustomerDTO customerDTO = createCustomerDTO();
+        Customer customer = createCustomer();
+        when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+
+        CustomerDTO persistedCustomer = customerService.updateCustomer(ID, customerDTO);
 
         assertNotNull(persistedCustomer);
         assertEquals(ID, persistedCustomer.getId());
@@ -98,5 +117,11 @@ class CustomerServiceTest {
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)
                 .build();
+    }
+
+
+    @AfterEach
+    void tearDown() {
+        verifyNoMoreInteractions(customerRepository);
     }
 }

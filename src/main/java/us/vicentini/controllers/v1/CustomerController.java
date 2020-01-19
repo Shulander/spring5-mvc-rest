@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,5 +48,13 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO) {
         CustomerDTO customer = customerService.createNewCustomer(customerDTO);
         return ResponseEntity.created(URI.create(customer.getCustomerUrl())).body(customer);
+    }
+
+
+    @ResponseBody
+    @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+        CustomerDTO customer = customerService.updateCustomer(id, customerDTO);
+        return ResponseEntity.ok().body(customer);
     }
 }

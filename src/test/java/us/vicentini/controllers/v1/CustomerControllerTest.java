@@ -17,11 +17,12 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static us.vicentini.util.ObjectUtil.asJsonString;
@@ -88,11 +89,9 @@ class CustomerControllerTest {
         CustomerDTO customer = CustomerDTO.builder()
                 .firstName("Bruce")
                 .lastName("Wayne").build();
-
         CustomerDTO persistedCustomer = customer.toBuilder()
                 .id(1L).build();
-
-        when(customerService.createNewCustomer(any(CustomerDTO.class))).thenReturn(persistedCustomer);
+        when(customerService.createNewCustomer(eq(customer))).thenReturn(persistedCustomer);
 
         mockMvc.perform(post("/api/v1/customers")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -100,8 +99,26 @@ class CustomerControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName", equalTo("Bruce")))
                 .andExpect(jsonPath("$.lastName", equalTo("Wayne")))
-                .andExpect(jsonPath("$.customerUrl", equalTo("/api/v1/customers/1")))
-                .andReturn();
+                .andExpect(jsonPath("$.customerUrl", equalTo("/api/v1/customers/1")));
+    }
+
+
+    @Test
+    void shouldUpdateCustomer() throws Exception {
+        CustomerDTO customer = CustomerDTO.builder()
+                .firstName("Bruce")
+                .lastName("Wayne").build();
+        CustomerDTO persistedCustomer = customer.toBuilder()
+                .id(1L).build();
+        when(customerService.updateCustomer(eq(1L), eq(customer))).thenReturn(persistedCustomer);
+
+        mockMvc.perform(put("/api/v1/customers/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(customer)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", equalTo("Bruce")))
+                .andExpect(jsonPath("$.lastName", equalTo("Wayne")))
+                .andExpect(jsonPath("$.customerUrl", equalTo("/api/v1/customers/1")));
     }
 
 
