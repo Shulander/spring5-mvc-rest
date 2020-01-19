@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import us.vicentini.api.v1.model.CustomerDTO;
+import us.vicentini.controllers.RestControllerAdvice;
+import us.vicentini.exceptions.ResourceNotFoundException;
 import us.vicentini.services.CustomerService;
 
 import java.util.List;
@@ -43,7 +45,9 @@ class CustomerControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        RestControllerAdvice controllerAdvice = new RestControllerAdvice();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(controllerAdvice).build();
     }
 
 
@@ -151,6 +155,18 @@ class CustomerControllerTest {
                 .andExpect(status().isOk());
 
         verify(customerService).deleteCustomerById(1L);
+    }
+
+
+    @Test
+    void shouldReturnNotFound() throws Exception {
+        ResourceNotFoundException notFoundException = new ResourceNotFoundException("Resource Not Found");
+        when(customerService.findCustomersById(1L)).thenThrow(notFoundException);
+
+        mockMvc.perform(get(CustomerController.BASE_PATH + "/1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", equalTo("Resource Not Found")));
     }
 
 

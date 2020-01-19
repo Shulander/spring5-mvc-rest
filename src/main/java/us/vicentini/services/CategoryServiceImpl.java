@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import us.vicentini.api.v1.mapper.CategoryMapper;
 import us.vicentini.api.v1.model.CategoryDTO;
 import us.vicentini.domain.Category;
+import us.vicentini.exceptions.ResourceNotFoundException;
 import us.vicentini.repositories.CategoryRepository;
 
 import java.util.List;
@@ -30,7 +31,8 @@ class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO findCategoryByName(String name) {
-        Category category = categoryRepository.findByName(name);
-        return categoryMapper.categoryToCategoryDTO(category);
+        return categoryRepository.findByName(name)
+                .map(categoryMapper::categoryToCategoryDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + name));
     }
 }

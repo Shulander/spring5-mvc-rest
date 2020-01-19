@@ -9,12 +9,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import us.vicentini.api.v1.mapper.CategoryMapper;
 import us.vicentini.api.v1.model.CategoryDTO;
 import us.vicentini.domain.Category;
+import us.vicentini.exceptions.ResourceNotFoundException;
 import us.vicentini.repositories.CategoryRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -55,7 +58,7 @@ public class CategoryServiceTest {
         Category category = new Category();
         category.setId(ID);
         category.setName(NAME);
-        when(categoryRepository.findByName(anyString())).thenReturn(category);
+        when(categoryRepository.findByName(anyString())).thenReturn(Optional.of(category));
 
         //when
         CategoryDTO categoryDTO = categoryService.findCategoryByName(NAME);
@@ -63,6 +66,20 @@ public class CategoryServiceTest {
         //then
         assertEquals(ID, categoryDTO.getId());
         assertEquals(NAME, categoryDTO.getName());
+    }
+
+
+    @Test
+    public void shouldNotGetCategoryByName() {
+        //given
+        when(categoryRepository.findByName(anyString())).thenReturn(Optional.empty());
+
+        //when
+        ResourceNotFoundException ex =
+                assertThrows(ResourceNotFoundException.class, () -> categoryService.findCategoryByName(NAME));
+
+        //then
+        assertEquals("Category not found: Jimmy", ex.getMessage());
     }
 
 

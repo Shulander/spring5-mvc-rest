@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import us.vicentini.api.v1.mapper.CustomerMapper;
 import us.vicentini.api.v1.model.CustomerDTO;
 import us.vicentini.domain.Customer;
+import us.vicentini.exceptions.ResourceNotFoundException;
 import us.vicentini.repositories.CustomerRepository;
 
 import java.util.Collections;
@@ -69,6 +70,17 @@ class CustomerServiceTest {
 
 
     @Test
+    void shouldNotFindCustomerById() {
+        when(customerRepository.findById(ID)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException ex =
+                assertThrows(ResourceNotFoundException.class, () -> customerService.findCustomersById(ID));
+
+        assertEquals("Customer not found: 1", ex.getMessage());
+    }
+
+
+    @Test
     void shouldFailWithExceptionCustomerNotFound() {
         when(customerRepository.findById(ID)).thenReturn(Optional.empty());
 
@@ -124,6 +136,18 @@ class CustomerServiceTest {
         verify(customer).setFirstName(FIRST_NAME);
         verify(customerDTO).getLastName();
         verify(customer).setLastName(LAST_NAME);
+    }
+
+
+    @Test
+    void shouldNotPatchCustomerNotFound() {
+        CustomerDTO customerDTO = spy(createCustomerDTO());
+        when(customerRepository.findById(ID)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException ex =
+                assertThrows(ResourceNotFoundException.class, () -> customerService.patchCustomer(ID, customerDTO));
+
+        assertEquals("Customer not found: 1", ex.getMessage());
     }
 
 

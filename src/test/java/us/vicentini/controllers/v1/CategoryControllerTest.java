@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import us.vicentini.api.v1.model.CategoryDTO;
+import us.vicentini.controllers.RestControllerAdvice;
+import us.vicentini.exceptions.ResourceNotFoundException;
 import us.vicentini.services.CategoryService;
 
 import java.util.Arrays;
@@ -42,7 +44,9 @@ public class CategoryControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+        RestControllerAdvice controllerAdvice = new RestControllerAdvice();
+        mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
+                .setControllerAdvice(controllerAdvice).build();
     }
 
 
@@ -79,6 +83,18 @@ public class CategoryControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(NAME)));
+    }
+
+
+    @Test
+    void shouldReturnNotFound() throws Exception {
+        ResourceNotFoundException notFoundException = new ResourceNotFoundException("Resource Not Found");
+        when(categoryService.findCategoryByName(anyString())).thenThrow(notFoundException);
+
+        mockMvc.perform(get(BASE_PATH + "/Jim")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", equalTo("Resource Not Found")));
     }
 
 

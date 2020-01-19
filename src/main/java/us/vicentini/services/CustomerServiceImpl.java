@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import us.vicentini.api.v1.mapper.CustomerMapper;
 import us.vicentini.api.v1.model.CustomerDTO;
 import us.vicentini.domain.Customer;
+import us.vicentini.exceptions.ResourceNotFoundException;
 import us.vicentini.repositories.CustomerRepository;
 
 import java.util.List;
@@ -34,7 +35,7 @@ class CustomerServiceImpl implements CustomerService {
     public CustomerDTO findCustomersById(Long id) {
         return customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDTO)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found: " + id));
     }
 
 
@@ -65,7 +66,7 @@ class CustomerServiceImpl implements CustomerService {
                 })
                 .map(customerRepository::save)
                 .map(customerMapper::customerToCustomerDTO)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found: " + id));
     }
 
 
