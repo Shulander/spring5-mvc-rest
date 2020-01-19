@@ -6,8 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import static us.vicentini.controllers.v1.CustomerController.API_V1_CUSTOMERS;
+import us.vicentini.controllers.v1.CustomerController;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +20,6 @@ public class CustomerDTO {
 
 
     public String getCustomerUrl() {
-        return API_V1_CUSTOMERS + "/" + getId();
+        return CustomerController.BASE_PATH + "/" + getId();
     }
 }

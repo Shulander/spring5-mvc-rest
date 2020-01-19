@@ -16,9 +16,10 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/api/v1/categories")
+@RequestMapping(CategoryController.BASE_PATH)
 @RequiredArgsConstructor
 public class CategoryController {
+    public static final String BASE_PATH = "/api/v1/categories";
 
     private final CategoryService categoryService;
 

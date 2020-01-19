@@ -22,10 +22,10 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(CustomerController.API_V1_CUSTOMERS)
+@RequestMapping(CustomerController.BASE_PATH)
 @RequiredArgsConstructor
 public class CustomerController {
-    public static final String API_V1_CUSTOMERS = "/api/v1/customers";
+    public static final String BASE_PATH = "/api/v1/customers";
     private final CustomerService customerService;
 
 

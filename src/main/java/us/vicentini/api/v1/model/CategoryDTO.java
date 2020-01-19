@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import us.vicentini.controllers.v1.CategoryController;
 
 @Data
 @Builder
@@ -16,4 +17,9 @@ public class CategoryDTO {
     @JsonIgnore
     private Long id;
     private String name;
+
+
+    public String getCustomerUrl() {
+        return CategoryController.BASE_PATH + "/" + getId();
+    }
 }
