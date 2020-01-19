@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import us.vicentini.api.v1.mapper.CustomerMapper;
 import us.vicentini.api.v1.model.CustomerDTO;
+import us.vicentini.domain.Customer;
 import us.vicentini.repositories.CustomerRepository;
 
 import java.util.List;
@@ -32,5 +33,13 @@ class CustomerServiceImpl implements CustomerService {
         return customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDTO)
                 .orElseThrow(RuntimeException::new);
+    }
+
+
+    @Override
+    public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
+        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
+        Customer savedCustomer = customerRepository.save(customer);
+        return customerMapper.customerToCustomerDTO(savedCustomer);
     }
 }

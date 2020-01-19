@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 import static us.vicentini.controllers.v1.CustomerController.API_V1_CUSTOMERS;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(toBuilder = true)
 public class CustomerDTO {
     private Long id;
     private String firstName;

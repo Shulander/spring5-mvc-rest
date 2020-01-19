@@ -17,6 +17,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,6 +66,29 @@ class CustomerServiceTest {
     @Test
     void shouldFailWithExceptionCustomerNotFound() {
         assertThrows(RuntimeException.class, () -> customerService.findCustomersById(ID));
+    }
+
+
+    @Test
+    void shouldSaveNewCustomer() {
+        CustomerDTO customerDTO = createCustomerDTO();
+        Customer customer = createCustomer();
+        when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+
+        CustomerDTO persistedCustomer = customerService.createNewCustomer(customerDTO);
+
+        assertNotNull(persistedCustomer);
+        assertEquals(ID, persistedCustomer.getId());
+        assertEquals(FIRST_NAME, persistedCustomer.getFirstName());
+        assertEquals(LAST_NAME, persistedCustomer.getLastName());
+    }
+
+
+    private CustomerDTO createCustomerDTO() {
+        return CustomerDTO.builder()
+                .firstName(FIRST_NAME)
+                .lastName(LAST_NAME)
+                .build();
     }
 
 
