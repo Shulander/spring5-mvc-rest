@@ -2,6 +2,7 @@ package us.vicentini.controllers.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,5 +66,13 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         CustomerDTO customer = customerService.patchCustomer(id, customerDTO);
         return ResponseEntity.ok().body(customer);
+    }
+
+
+    @ResponseBody
+    @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+        customerService.deleteCustomerById(id);
+        return ResponseEntity.ok().build();
     }
 }

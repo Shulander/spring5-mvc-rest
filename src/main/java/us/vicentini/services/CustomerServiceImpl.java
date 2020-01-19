@@ -69,6 +69,12 @@ class CustomerServiceImpl implements CustomerService {
     }
 
 
+    @Override
+    public void deleteCustomerById(Long id) {
+        customerRepository.deleteById(id);
+    }
+
+
     private <T> void copyIfNonNull(Supplier<T> s, Consumer<T> c) {
         T value = s.get();
         if (value != null) {

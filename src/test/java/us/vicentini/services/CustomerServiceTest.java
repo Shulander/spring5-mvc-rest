@@ -127,6 +127,14 @@ class CustomerServiceTest {
     }
 
 
+    @Test
+    void shouldDeleteCustomerById() {
+        customerService.deleteCustomerById(ID);
+
+        verify(customerRepository).deleteById(ID);
+    }
+
+
     private CustomerDTO createCustomerDTO() {
         return CustomerDTO.builder()
                 .firstName(FIRST_NAME)
