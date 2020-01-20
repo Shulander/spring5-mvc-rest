@@ -8,6 +8,9 @@
 
     <name>spring5-mvc-model</name>
     <description>Demo project for Spring Boot</description>
+    <properties>
+        <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
+    </properties>
 
     <parent>
         <groupId>us.vicentini</groupId>
@@ -16,7 +19,35 @@
     </parent>
 
     <!--<dependencies>-->
-
+    <dependencies>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
+    </dependencies>
     <!--</dependencies>-->
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>${jaxb2-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- The package of your generated sources -->
+                    <packageName>us.vicentini.model</packageName>
+                    <sources>
+                        <source>src/main/resources/xsd</source>
+                    </sources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
