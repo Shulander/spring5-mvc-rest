@@ -10,15 +10,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import us.vicentini.api.v1.model.CustomerDTO;
 import us.vicentini.controllers.RestControllerAdvice;
 import us.vicentini.exceptions.ResourceNotFoundException;
+import us.vicentini.model.CustomerDTO;
 import us.vicentini.services.CustomerService;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -53,16 +54,14 @@ class CustomerControllerTest {
 
     @Test
     void shouldListAllCustomers() throws Exception {
-        CustomerDTO customer1 = CustomerDTO.builder()
-                .id(1L)
-                .firstName("John")
-                .lastName("Doe")
-                .build();
-        CustomerDTO customer2 = CustomerDTO.builder()
-                .id(2L)
-                .firstName("Lemuel")
-                .lastName("Gulliver")
-                .build();
+        CustomerDTO customer1 = new CustomerDTO();
+        customer1.setFirstName("John");
+        customer1.setLastName("Doe");
+        customer1.setCustomerUrl(CustomerController.BASE_PATH + "/2");
+        CustomerDTO customer2 = new CustomerDTO();
+        customer2.setFirstName("Lemuel");
+        customer2.setLastName("Gulliver");
+        customer2.setCustomerUrl(CustomerController.BASE_PATH + "/2");
         when(customerService.findAllCustomers()).thenReturn(List.of(customer1, customer2));
 
         mockMvc.perform(get(CustomerController.BASE_PATH)
@@ -75,19 +74,18 @@ class CustomerControllerTest {
 
     @Test
     void shouldFindCustomerById() throws Exception {
-        CustomerDTO customer = CustomerDTO.builder()
-                .id(1L)
-                .firstName("John")
-                .lastName("Doe")
-                .build();
+        CustomerDTO customer = new CustomerDTO();
+        customer.setFirstName("Bruce");
+        customer.setLastName("Wayne");
+        customer.setCustomerUrl(CustomerController.BASE_PATH + "/1");
         when(customerService.findCustomersById(1L)).thenReturn(customer);
 
         mockMvc.perform(get(CustomerController.BASE_PATH + "/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName", equalTo("John")))
-                .andExpect(jsonPath("$.lastName", equalTo("Doe")))
+                .andExpect(jsonPath("$.firstName", equalTo("Bruce")))
+                .andExpect(jsonPath("$.lastName", equalTo("Wayne")))
                 .andExpect(jsonPath("$.customerUrl", equalTo(CustomerController.BASE_PATH + "/1")));
 
     }
@@ -95,12 +93,14 @@ class CustomerControllerTest {
 
     @Test
     void shouldCreateNewCustomer() throws Exception {
-        CustomerDTO customer = CustomerDTO.builder()
-                .firstName("Bruce")
-                .lastName("Wayne").build();
-        CustomerDTO persistedCustomer = customer.toBuilder()
-                .id(1L).build();
-        when(customerService.createNewCustomer(eq(customer))).thenReturn(persistedCustomer);
+        CustomerDTO customer = new CustomerDTO();
+        customer.setFirstName("Bruce");
+        customer.setLastName("Wayne");
+        CustomerDTO persistedCustomer = new CustomerDTO();
+        persistedCustomer.setFirstName("Bruce");
+        persistedCustomer.setLastName("Wayne");
+        persistedCustomer.setCustomerUrl(CustomerController.BASE_PATH + "/1");
+        when(customerService.createNewCustomer(any(CustomerDTO.class))).thenReturn(persistedCustomer);
 
         mockMvc.perform(post(CustomerController.BASE_PATH)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -115,12 +115,14 @@ class CustomerControllerTest {
 
     @Test
     void shouldUpdateCustomer() throws Exception {
-        CustomerDTO customer = CustomerDTO.builder()
-                .firstName("Bruce")
-                .lastName("Wayne").build();
-        CustomerDTO persistedCustomer = customer.toBuilder()
-                .id(1L).build();
-        when(customerService.updateCustomer(eq(1L), eq(customer))).thenReturn(persistedCustomer);
+        CustomerDTO customer = new CustomerDTO();
+        customer.setFirstName("Bruce");
+        customer.setLastName("Wayne");
+        CustomerDTO persistedCustomer = new CustomerDTO();
+        persistedCustomer.setFirstName("Bruce");
+        persistedCustomer.setLastName("Wayne");
+        persistedCustomer.setCustomerUrl(CustomerController.BASE_PATH + "/1");
+        when(customerService.updateCustomer(eq(1L), any(CustomerDTO.class))).thenReturn(persistedCustomer);
 
         mockMvc.perform(put(CustomerController.BASE_PATH + "/1")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -135,12 +137,14 @@ class CustomerControllerTest {
 
     @Test
     void shouldPatchCustomer() throws Exception {
-        CustomerDTO customer = CustomerDTO.builder()
-                .firstName("Bruce")
-                .lastName("Wayne").build();
-        CustomerDTO persistedCustomer = customer.toBuilder()
-                .id(1L).build();
-        when(customerService.patchCustomer(eq(1L), eq(customer))).thenReturn(persistedCustomer);
+        CustomerDTO customer = new CustomerDTO();
+        customer.setFirstName("Bruce");
+        customer.setLastName("Wayne");
+        CustomerDTO persistedCustomer = new CustomerDTO();
+        persistedCustomer.setFirstName("Bruce");
+        persistedCustomer.setLastName("Wayne");
+        persistedCustomer.setCustomerUrl(CustomerController.BASE_PATH + "/1");
+        when(customerService.patchCustomer(eq(1L), any(CustomerDTO.class))).thenReturn(persistedCustomer);
 
         mockMvc.perform(patch(CustomerController.BASE_PATH + "/1")
                                 .contentType(MediaType.APPLICATION_JSON)

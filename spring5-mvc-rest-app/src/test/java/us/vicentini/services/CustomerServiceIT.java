@@ -9,8 +9,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import us.vicentini.api.v1.mapper.CustomerMapper;
-import us.vicentini.api.v1.model.CustomerDTO;
 import us.vicentini.bootstrap.Bootstrap;
+import us.vicentini.domain.Customer;
+import us.vicentini.model.CustomerDTO;
 import us.vicentini.repositories.CategoryRepository;
 import us.vicentini.repositories.CustomerRepository;
 import us.vicentini.repositories.VendorRepository;
@@ -44,9 +45,8 @@ class CustomerServiceIT {
 
     @Test
     void patchCustomerFirstName() {
-        CustomerDTO customerDto = CustomerDTO.builder()
-                .firstName("Bat")
-                .build();
+        CustomerDTO customerDto = new CustomerDTO();
+        customerDto.setFirstName("Bat");
 
         CustomerDTO originalCustomer = customerService.findCustomersById(getIdFirstCustomer());
 
@@ -60,9 +60,8 @@ class CustomerServiceIT {
 
     @Test
     void patchCustomerLastName() {
-        CustomerDTO customerDto = CustomerDTO.builder()
-                .lastName("Man")
-                .build();
+        CustomerDTO customerDto = new CustomerDTO();
+        customerDto.setLastName("Man");
 
         CustomerDTO originalCustomer = customerService.findCustomersById(getIdFirstCustomer());
 
@@ -75,10 +74,10 @@ class CustomerServiceIT {
 
 
     private long getIdFirstCustomer() {
-        return customerService.findAllCustomers()
+        return customerRepository.findAll()
                 .stream()
                 .findFirst()
-                .map(CustomerDTO::getId)
+                .map(Customer::getId)
                 .orElseThrow();
     }
 }

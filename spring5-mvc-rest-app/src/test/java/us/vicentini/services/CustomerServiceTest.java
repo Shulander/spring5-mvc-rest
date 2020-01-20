@@ -7,9 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import us.vicentini.api.v1.mapper.CustomerMapper;
-import us.vicentini.api.v1.model.CustomerDTO;
+import us.vicentini.controllers.v1.CustomerController;
 import us.vicentini.domain.Customer;
 import us.vicentini.exceptions.ResourceNotFoundException;
+import us.vicentini.model.CustomerDTO;
 import us.vicentini.repositories.CustomerRepository;
 
 import java.util.Collections;
@@ -63,9 +64,9 @@ class CustomerServiceTest {
 
         CustomerDTO customerDto = customerService.findCustomersById(ID);
 
-        assertEquals(ID, customerDto.getId());
         assertEquals(FIRST_NAME, customerDto.getFirstName());
         assertEquals(LAST_NAME, customerDto.getLastName());
+        assertEquals(CustomerController.BASE_PATH + "/" + ID, customerDto.getCustomerUrl());
     }
 
 
@@ -97,9 +98,9 @@ class CustomerServiceTest {
         CustomerDTO persistedCustomer = customerService.createNewCustomer(customerDTO);
 
         assertNotNull(persistedCustomer);
-        assertEquals(ID, persistedCustomer.getId());
         assertEquals(FIRST_NAME, persistedCustomer.getFirstName());
         assertEquals(LAST_NAME, persistedCustomer.getLastName());
+        assertEquals(CustomerController.BASE_PATH + "/" + ID, persistedCustomer.getCustomerUrl());
     }
 
 
@@ -112,9 +113,9 @@ class CustomerServiceTest {
         CustomerDTO persistedCustomer = customerService.updateCustomer(ID, customerDTO);
 
         assertNotNull(persistedCustomer);
-        assertEquals(ID, persistedCustomer.getId());
         assertEquals(FIRST_NAME, persistedCustomer.getFirstName());
         assertEquals(LAST_NAME, persistedCustomer.getLastName());
+        assertEquals(CustomerController.BASE_PATH + "/" + ID, persistedCustomer.getCustomerUrl());
     }
 
 
@@ -129,9 +130,9 @@ class CustomerServiceTest {
         CustomerDTO persistedCustomer = customerService.patchCustomer(ID, customerDTO);
 
         assertNotNull(persistedCustomer);
-        assertEquals(ID, persistedCustomer.getId());
         assertEquals(FIRST_NAME, persistedCustomer.getFirstName());
         assertEquals(LAST_NAME, persistedCustomer.getLastName());
+        assertEquals(CustomerController.BASE_PATH + "/" + ID, persistedCustomer.getCustomerUrl());
         verify(customerDTO).getFirstName();
         verify(customer).setFirstName(FIRST_NAME);
         verify(customerDTO).getLastName();
@@ -160,10 +161,10 @@ class CustomerServiceTest {
 
 
     private CustomerDTO createCustomerDTO() {
-        return CustomerDTO.builder()
-                .firstName(FIRST_NAME)
-                .lastName(LAST_NAME)
-                .build();
+        CustomerDTO customer = new CustomerDTO();
+        customer.setFirstName(FIRST_NAME);
+        customer.setLastName(LAST_NAME);
+        return customer;
     }
 
 

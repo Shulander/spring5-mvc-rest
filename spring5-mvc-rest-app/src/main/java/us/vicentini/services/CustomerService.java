@@ -1,6 +1,6 @@
 package us.vicentini.services;
 
-import us.vicentini.api.v1.model.CustomerDTO;
+import us.vicentini.model.CustomerDTO;
 
 import java.util.List;
 

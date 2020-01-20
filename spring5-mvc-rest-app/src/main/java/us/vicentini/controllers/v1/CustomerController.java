@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import us.vicentini.api.v1.model.CustomerDTO;
-import us.vicentini.api.v1.model.CustomerListDTO;
+import us.vicentini.model.CustomerDTO;
+import us.vicentini.model.CustomerListDTO;
 import us.vicentini.services.CustomerService;
 
 import java.util.List;
@@ -39,7 +39,9 @@ public class CustomerController {
     @GetMapping
     public CustomerListDTO findAllCustomers() {
         List<CustomerDTO> customers = customerService.findAllCustomers();
-        return new CustomerListDTO(customers);
+        CustomerListDTO customerListDTO = new CustomerListDTO();
+        customerListDTO.getCustomers().addAll(customers);
+        return customerListDTO;
     }
 
 
