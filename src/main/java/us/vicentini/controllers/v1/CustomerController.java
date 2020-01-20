@@ -31,7 +31,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
 
-    @ApiOperation(value = "This will list all customers", notes = "These are some notes about the API")
+    @ApiOperation(value = "List all customers", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public CustomerListDTO findAllCustomers() {
@@ -42,6 +42,7 @@ public class CustomerController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Find customer by Id", produces = APPLICATION_JSON_VALUE)
     public CustomerDTO findCustomerById(@PathVariable Long id) {
         return customerService.findCustomersById(id);
     }
@@ -49,6 +50,7 @@ public class CustomerController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(produces = APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Create a new customer", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public CustomerDTO createNewCustomer(@RequestBody CustomerDTO customerDTO) {
         return customerService.createNewCustomer(customerDTO);
     }
@@ -56,6 +58,8 @@ public class CustomerController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Update a customer identified by id", produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
     public CustomerDTO updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         return customerService.updateCustomer(id, customerDTO);
     }
@@ -63,6 +67,8 @@ public class CustomerController {
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Partial update a customer identified by id", produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
     public CustomerDTO patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         return customerService.patchCustomer(id, customerDTO);
     }
@@ -70,6 +76,7 @@ public class CustomerController {
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Delete a customer identified by id")
     public void deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomerById(id);
     }

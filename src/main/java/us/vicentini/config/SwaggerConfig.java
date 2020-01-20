@@ -26,9 +26,9 @@ public class SwaggerConfig {
                 .paths(PathSelectors.ant("/api/v1/**"))
                 .build()
                 .pathMapping("/")
-                .tags(new Tag("customer-controller", "This is my Customer Controller"),
-                      new Tag("category-controller", "This is my Category Controller"),
-                      new Tag("vendor-controller", "This is my Vendor Controller"))
+                .tags(new Tag("customer-controller", "This is my Customer API"),
+                      new Tag("category-controller", "This is my Category API"),
+                      new Tag("vendor-controller", "This is my Vendor API"))
                 .apiInfo(metaData());
     }
 

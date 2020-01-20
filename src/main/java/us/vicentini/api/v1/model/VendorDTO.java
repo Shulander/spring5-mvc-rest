@@ -20,6 +20,7 @@ public class VendorDTO {
     private String name;
 
 
+    @ApiModelProperty(value = "Vendor's resource Url", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     public String getVendorUrl() {
         return VendorController.BASE_PATH + "/" + id;
     }
