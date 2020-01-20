@@ -1,6 +1,7 @@
 package us.vicentini.api.v1.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,9 @@ import us.vicentini.controllers.v1.CustomerController;
 public class CustomerDTO {
     @JsonIgnore
     private Long id;
+    @ApiModelProperty(value = "Customer first name", required = true)
     private String firstName;
+    @ApiModelProperty(value = "Customer last name", required = true)
     private String lastName;
 
 

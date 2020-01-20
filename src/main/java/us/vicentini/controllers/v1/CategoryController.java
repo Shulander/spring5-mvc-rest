@@ -1,5 +1,6 @@
 package us.vicentini.controllers.v1;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@Api(tags = "category-controller")
 @RestController
 @RequestMapping(CategoryController.BASE_PATH)
 @RequiredArgsConstructor

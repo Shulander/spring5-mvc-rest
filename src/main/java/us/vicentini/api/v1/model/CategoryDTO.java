@@ -2,6 +2,7 @@ package us.vicentini.api.v1.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ import us.vicentini.controllers.v1.CategoryController;
 public class CategoryDTO {
     @JsonIgnore
     private Long id;
+    @ApiModelProperty(value = "Category name", required = true)
     private String name;
 
 
