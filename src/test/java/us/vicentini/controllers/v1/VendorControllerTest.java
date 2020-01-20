@@ -64,7 +64,8 @@ class VendorControllerTest {
         when(vendorService.findAllVendors()).thenReturn(List.of(vendor1, vendor2));
 
         mockMvc.perform(get(VendorController.BASE_PATH)
-                                .contentType(MediaType.APPLICATION_JSON))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.vendors", hasSize(2)));
     }
@@ -79,7 +80,8 @@ class VendorControllerTest {
         when(vendorService.findVendorsById(1L)).thenReturn(vendor);
 
         mockMvc.perform(get(VendorController.BASE_PATH + "/1")
-                                .contentType(MediaType.APPLICATION_JSON))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo("Franks Fresh Fruits from France Ltd.")))
                 .andExpect(jsonPath("$.vendorUrl", equalTo(VendorController.BASE_PATH + "/1")));
@@ -97,6 +99,7 @@ class VendorControllerTest {
 
         mockMvc.perform(post(VendorController.BASE_PATH)
                                 .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
                                 .content(asJsonString(vendor)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", equalTo("Franks Fresh Fruits from France Ltd.")))
@@ -114,6 +117,7 @@ class VendorControllerTest {
 
         mockMvc.perform(put(VendorController.BASE_PATH + "/1")
                                 .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
                                 .content(asJsonString(vendor)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo("Franks Fresh Fruits from France Ltd.")))
@@ -130,6 +134,7 @@ class VendorControllerTest {
 
         mockMvc.perform(patch(VendorController.BASE_PATH + "/1")
                                 .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
                                 .content(asJsonString(vendor)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo("Franks Fresh Fruits from France Ltd.")))
@@ -140,7 +145,8 @@ class VendorControllerTest {
     @Test
     void shouldDeleteVendor() throws Exception {
         mockMvc.perform(delete(VendorController.BASE_PATH + "/1")
-                                .contentType(MediaType.APPLICATION_JSON))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         verify(vendorService).deleteVendorById(1L);
@@ -153,7 +159,8 @@ class VendorControllerTest {
         when(vendorService.findVendorsById(1L)).thenThrow(notFoundException);
 
         mockMvc.perform(get(VendorController.BASE_PATH + "/1")
-                                .contentType(MediaType.APPLICATION_JSON))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", equalTo("Resource Not Found")));
     }

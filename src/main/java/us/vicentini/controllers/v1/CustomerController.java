@@ -21,8 +21,11 @@ import us.vicentini.services.CustomerService;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
-@Api(tags = "customer-controller")
+@Api(tags = "customer-controller",
+        produces = APPLICATION_JSON_VALUE + ", " + APPLICATION_XML_VALUE,
+        consumes = APPLICATION_JSON_VALUE + ", " + APPLICATION_XML_VALUE)
 @RestController
 @RequestMapping(CustomerController.BASE_PATH)
 @RequiredArgsConstructor
@@ -31,9 +34,9 @@ public class CustomerController {
     private final CustomerService customerService;
 
 
-    @ApiOperation(value = "List all customers", produces = APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "List all customers")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @GetMapping
     public CustomerListDTO findAllCustomers() {
         List<CustomerDTO> customers = customerService.findAllCustomers();
         return new CustomerListDTO(customers);
@@ -41,41 +44,39 @@ public class CustomerController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Find customer by Id", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
+    @ApiOperation(value = "Find customer by Id")
     public CustomerDTO findCustomerById(@PathVariable Long id) {
         return customerService.findCustomersById(id);
     }
 
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(produces = APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Create a new customer", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @PostMapping
+    @ApiOperation(value = "Create a new customer")
     public CustomerDTO createNewCustomer(@RequestBody CustomerDTO customerDTO) {
         return customerService.createNewCustomer(customerDTO);
     }
 
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Update a customer identified by id", produces = APPLICATION_JSON_VALUE,
-            consumes = APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}")
+    @ApiOperation(value = "Update a customer identified by id")
     public CustomerDTO updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         return customerService.updateCustomer(id, customerDTO);
     }
 
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Partial update a customer identified by id", produces = APPLICATION_JSON_VALUE,
-            consumes = APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/{id}")
+    @ApiOperation(value = "Partial update a customer identified by id")
     public CustomerDTO patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         return customerService.patchCustomer(id, customerDTO);
     }
 
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     @ApiOperation(value = "Delete a customer identified by id")
     public void deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomerById(id);

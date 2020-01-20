@@ -15,8 +15,11 @@ import us.vicentini.services.CategoryService;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
-@Api(tags = "category-controller")
+@Api(tags = "category-controller",
+        produces = APPLICATION_JSON_VALUE + ", " + APPLICATION_XML_VALUE,
+        consumes = APPLICATION_JSON_VALUE + ", " + APPLICATION_XML_VALUE)
 @RestController
 @RequestMapping(CategoryController.BASE_PATH)
 @RequiredArgsConstructor
@@ -27,7 +30,7 @@ public class CategoryController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @GetMapping
     public CategoryListDTO listCategories() {
         List<CategoryDTO> categories = categoryService.findAllCategories();
         return new CategoryListDTO(categories);
@@ -35,7 +38,7 @@ public class CategoryController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{name}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{name}")
     public CategoryDTO listCategories(@PathVariable String name) {
         return categoryService.findCategoryByName(name);
     }
